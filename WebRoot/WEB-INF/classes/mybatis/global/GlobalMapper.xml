@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.loan.global.dao.GlobalDao">  
+<select id="getAdById" parameterType="int" resultType="AdDTO">  
+    SELECT id,content,start_time,end_time,add_time,title,ad_type FROM lzh_ad  WHERE id=#{id}
+</select>  
+<select id="getQqByType" parameterType="int" resultType="QqDTO">  
+    SELECT  id,qq_num,qq_title,qq_order,is_show,type from lzh_qq where type = ${typeid} order by qq_order desc 
+</select>  
+
+<!--eviction 回收策略为先进先出-->
+<!--flushInterval 自动刷新时间60s-->
+<!--size 最多缓存512个引用对象-->
+<cache
+        eviction="FIFO" 
+        flushInterval="60000"
+        size="512"
+        readOnly="true" />
+</mapper>

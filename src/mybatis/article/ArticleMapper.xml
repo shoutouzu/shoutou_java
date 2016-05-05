@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+
+<mapper namespace="com.loan.article.dao.ArticleDao">  
+	<select id="getArticleList"  resultType="ArticleDTO" >  
+	    SELECT id,title,art_set,art_time,art_url,art_img,art_info,art_keyword,type_id,sort_order,read_count from lzh_article 
+	    where type_id=#{article.type_id}   order by sort_order desc,id DESC
+	</select> 
+	<select id="getArticleListCount"  resultType="int" >  
+	    SELECT count(id) from lzh_article  where type_id=#{article.type_id}     order by sort_order desc,id DESC
+	</select> 
+	<select id="getMediasList" resultType="MediaDTO">
+		SELECT  id,link_txt,link_href,link_img,link_order,link_type,is_show from lzh_media where is_show =1 ORDER BY link_order DESC 
+	</select>
+	<select id="getFriendsList" resultType="FriendDTO">
+		SELECT  id,link_txt,link_href,link_img,link_order,link_type,is_show from lzh_friend order by link_order DESC
+	</select>
+	<select id="getArticleById" resultType="ArticleDTO" >  
+		SELECT id,title,art_set,art_time,art_url,art_content,art_img,art_info,art_keyword,type_id,sort_order,read_count from lzh_article 
+	    where id=#{id} 
+	</select>
+	<select id="getArticleCategoryListByPid" resultType="ArticleCategoryDTO" >  
+		SELECT   id,type_name,type_url,type_info,type_content,sort_order,type_set,type_nid,is_hiden,add_time,is_sys,model from lzh_article_category
+		where parent_id = #{articleCategoryDTO.parent_id}  order by sort_order DESC
+	</select>
+	<select id="getArticleCategoryByPid" resultType="ArticleCategoryDTO" >  
+		SELECT   id,type_name,type_url,type_info,type_content,sort_order,type_set,type_nid,is_hiden,add_time,is_sys,model from lzh_article_category
+		where id = #{id} 
+	</select>
+	<cache
+        eviction="FIFO" 
+        flushInterval="60000"
+        size="512"
+        readOnly="true" />
+</mapper>

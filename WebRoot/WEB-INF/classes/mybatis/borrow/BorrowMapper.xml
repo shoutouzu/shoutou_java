@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.loan.borrow.dao.BorrowInfoDao">  
+	<select id="getBorrowInfoList" resultType="BorrowInfoDTO"  parameterType="java.util.Map">  
+	    SELECT id,borrow_name,money_invest_place,borrow_type,stock_type,reward_type,borrow_times,borrow_status,borrow_money,borrow_use,repayment_type,borrow_interest_rate,borrow_duration,collect_time,add_time,province,has_borrow,has_vouch,city,area,reward_num,password,is_tuijian,deadline,danbao,borrow_info,risk_control
+	 	from lzh_borrow_info 
+	 	<where>
+	 			borrow_status in
+	 				<foreach collection="borrow_status" item="id" index="index"
+			            open="(" close=")" separator=",">
+			            #{id}
+			        </foreach>
+					and stock_type in 
+					<foreach collection="stock_type" item="id" index="index"
+			            open="(" close=")" separator=",">
+			            #{id}
+			        </foreach>
+			        <if test="borrow_duration != ''">
+			        	<if test="borrow_duration_max == 3">
+			        		and ((borrow_duration between #{borrow_duration_min} and #{borrow_duration_max} ) or stock_type = 1)
+			        	</if>
+			        	<if test="borrow_duration_max != 3">
+			        		and (borrow_duration between #{borrow_duration_min} and #{borrow_duration_max} ) and stock_type != 1
+			        	</if>
+			        </if>
+	 	</where>
+	 	 order by borrow_status asc , first_verify_time desc
+	</select>
+	<select id="getBorrowInfoById" resultType="BorrowInfoDTO">
+		select id,borrow_name,money_invest_place,borrow_type,stock_type,reward_type,borrow_times,borrow_status,borrow_money,borrow_use,repayment_type,borrow_interest_rate,borrow_duration,collect_time,add_time,province,has_borrow,has_vouch,city,area,reward_num,password,is_tuijian,deadline,danbao,borrow_info,risk_control,updata,borrow_max,borrow_min,first_verify_time,capital_name,capital_card
+		 from lzh_borrow_info where id = #{id}
+	</select>
+	
+	<select id="getSumInvestorProfit" resultType="BorrowInfoDTO">
+		SELECT  sum(borrow_interest) as investor_profit ,sum(borrow_money) borrow_sum from lzh_borrow_info   where borrow_status in (6,7,9,10);
+	</select>
+
+</mapper>

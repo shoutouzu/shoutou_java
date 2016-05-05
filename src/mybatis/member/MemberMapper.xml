@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.loan.member.dao.MemberDao">  
+<select id="getMemberCount"  resultType="int">  
+    SELECT count(id) FROM lzh_members
+</select>  
+<select id="getMemberMoneyById" resultType="MemberMoneyDTO">
+	SELECT mm.account_money,mm.back_money from lzh_members m LEFT JOIN lzh_member_money mm on mm.uid = m.id where m.id = #{id}
+</select>
+</mapper>
