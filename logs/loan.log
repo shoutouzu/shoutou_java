@@ -6,4 +6,6 @@
    [INFO ] 2016-03-21 17:03:09 org.springframework.beans.factory.xml.XmlBeanDefinitionReader@(XmlBeanDefinitionReader.java:316):Loading XML bean definitions from class path resource [applicationContext.xml]
    [INFO ] 2016-03-21 17:03:09 org.springframework.core.io.support.PropertiesLoaderSupport@(PropertiesLoaderSupport.java:172):Loading properties file from URL [file:/F:/workspace/loan/WebRoot/WEB-INF/classes/application.properties]
    [INFO ] 2016-03-21 17:03:10 com.loan.member.controller.UserController@(UserController.java:28):≤‚ ‘
+
+   test
    
