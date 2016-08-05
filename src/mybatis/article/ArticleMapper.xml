@@ -3,6 +3,9 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
 
 <mapper namespace="com.loan.article.dao.ArticleDao">  
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache" /> --> 
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+	
 	<select id="getArticleList"  resultType="ArticleDTO" >  
 	    SELECT id,title,art_set,art_time,art_url,art_img,art_info,art_keyword,type_id,sort_order,read_count from lzh_article 
 	    where type_id=#{article.type_id}   order by sort_order desc,id DESC

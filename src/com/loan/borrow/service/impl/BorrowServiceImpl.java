@@ -12,6 +12,7 @@ package com.loan.borrow.service.impl;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.loan.borrow.dao.BorrowInfoDao;
@@ -41,6 +42,7 @@ public class BorrowServiceImpl implements IBorrowService{
 	 * @author admin
 	 * @date Mar 24, 2016 10:58:39 AM
 	 */
+	@Cacheable(value="myCache",key=  "'getBorrowInfoList'" )
 	public PageList<BorrowInfoDTO> getBorrowInfoList(Map<String, Object> map,Pageable pageable){
 		return borrowInfoDao.getBorrowInfoList(map,pageable);
 	}

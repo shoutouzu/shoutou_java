@@ -1,6 +1,7 @@
 package com.loan.article.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -83,5 +84,8 @@ public interface IArticleService {
 	 * @date Apr 6, 2016 2:43:10 PM
 	 */
 	public ArticleCategoryDTO getArticleCategoryByPid(int id);
+	public List<String> getlist();
+	
+	//public String  getlist();
 
 }

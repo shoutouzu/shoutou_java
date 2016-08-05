@@ -9,19 +9,29 @@
  */ 
 package com.loan.article.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
+import net.sf.ehcache.CacheManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.loan.article.dto.ArticleCategoryDTO;
 import com.loan.article.dto.ArticleDTO;
 import com.loan.article.service.IArticleService;
+import com.loan.article.service.impl.ArticleServiceImpl;
+import com.loan.test.UserService;
 import com.loan.utils.Page;
 import com.loan.utils.mybatis.paginator.PageList;
 import com.loan.utils.mybatis.paginator.Pageable;
@@ -40,10 +50,37 @@ public class ArticleController {
 	
 	@Autowired
 	private IArticleService articleService;
+	@Autowired
+	private CacheManager cacheManager;
+	
+	 @Resource  
+	    private UserService userService;  
+	    
+	      
+	    @RequestMapping(value="/get/{userNo}", method=RequestMethod.GET)  
+	    public String get(@PathVariable String userNo, Model model){  
+	        String username = userService.get(userNo);  
+	        model.addAttribute("username", username);  
+	        System.out.println("cts1==========================="+cacheManager.getCache("myCache").get("get"+userNo));
+	        return "getUser";  
+	    }
+	    
+	@RequestMapping("gonggao1/{userNo}")
+	public String gonggao1(@PathVariable String userNo){
+		String username = userService.get(userNo);  
+        System.out.println("cts111==========================="+cacheManager.getCache("myCache").get("get"+userNo));
+        
+		try {
+			articleService.getlist();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        System.out.println("cts3==========================="+cacheManager.getCache("myCache").get("cts3"));
+		return "gonggao/gonggao";
+	}
 	
 	@RequestMapping("gonggao")
 	public String gonggao(@RequestParam("flag")String flag,@RequestParam(value="page",required=true,defaultValue="1")int page,ModelMap modelMap){
-		//网站公告
 		ArticleDTO article = new ArticleDTO();
 		article.setType_id(article.getNid(flag));
 		Pageable pageable = new Pageable(page,15);
@@ -59,7 +96,7 @@ public class ArticleController {
 		articleDTO.setType_id(article.getNid(flag)); 
 		modelMap.put("articleDTO", articleDTO);
 		Page pag = new Page(articleService.getArticleListCount(article), page,15);
-		Map map = new HashMap();
+		HashMap<Object,Object> map = new HashMap<Object,Object>();
 		modelMap.put("page", pag);
 		modelMap.put("list", list);
 		modelMap.put("param", map);
@@ -75,6 +112,8 @@ public class ArticleController {
 		articleCategoryDTO.setParent_id(9);
 		ArrayList<ArticleCategoryDTO> listAc  = articleService.getArticleCategoryListByPid(articleCategoryDTO);
 		modelMap.put("leftlist", listAc);
+		
+		
 		return "gonggao/view";
 	}
 	public static void main(String[] args) {

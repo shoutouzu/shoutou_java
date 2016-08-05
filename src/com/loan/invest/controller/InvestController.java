@@ -131,7 +131,10 @@ public class InvestController extends BaseController{
 		
 		
 		try {
-			List<Map<String, String>> imgs_list = (List)PHPSerializer.unserialize(borrowInfoDTO.getUpdata().getBytes());
+			List<Map<String, String>> imgs_list = null;
+			if(borrowInfoDTO.getUpdata()!=null && !"".equals(borrowInfoDTO.getUpdata())){
+				imgs_list = (List)PHPSerializer.unserialize(borrowInfoDTO.getUpdata().getBytes());
+			}
 			
 			modelMap.put("imgs", imgs_list);
 		} catch (IllegalAccessException e) {

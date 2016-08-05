@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
 <mapper namespace="com.loan.borrow.dao.BorrowInfoDao">  
+
+<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+
 	<select id="getBorrowInfoList" resultType="BorrowInfoDTO"  parameterType="java.util.Map">  
 	    SELECT id,borrow_name,money_invest_place,borrow_type,stock_type,reward_type,borrow_times,borrow_status,borrow_money,borrow_use,repayment_type,borrow_interest_rate,borrow_duration,collect_time,add_time,province,has_borrow,has_vouch,city,area,reward_num,password,is_tuijian,deadline,danbao,borrow_info,risk_control
 	 	from lzh_borrow_info 

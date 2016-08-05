@@ -1,6 +1,6 @@
 package com.loan.Junit;
 
-import java.util.ArrayList;
+import net.sf.ehcache.CacheManager;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.loan.article.dto.ArticleDTO;
 import com.loan.article.service.IArticleService;
 import com.loan.borrow.service.IBorrowService;
-import com.loan.invest.dto.Borrow_investorDTO;
 import com.loan.invest.service.IInvestService;
 import com.loan.member.service.IMemberService;
 import com.loan.utils.mybatis.paginator.PageList;
@@ -27,6 +27,10 @@ public class TestMyBatis {
 	private IArticleService articleService;
 	@Autowired
 	private IInvestService investService;
+	
+	@Autowired
+	private CacheManager cacheManager;
+	
 	
 	@Test
 	public void test() {   
@@ -96,7 +100,7 @@ public class TestMyBatis {
 			System.out.println(reString);
 			MemberMoneyDTO m = member.getMemberMoneyById(62);
 			System.err.println(m.getAccount_money());
-			*/
+			
 			Pageable pageable = new Pageable();
 			pageable.setPageSize(5);
 			pageable.setCurrentPage(2);
@@ -104,6 +108,37 @@ public class TestMyBatis {
 			System.err.println(31/10);
 			int pages = (int)Math.ceil(((double)21 + 0.0D) / (double)10);
 			System.out.println(pages);
+			*/
+			ArticleDTO article = new ArticleDTO();
+			article.setType_id(43);
+			long begin = System.nanoTime();  
+			Pageable pageable = new Pageable(1,15);
+			PageList<ArticleDTO> list  = articleService.getArticleList(article, pageable);  
+	        long end = System.nanoTime() - begin;  
+	        System.out.println("count :" + end);  
+	        // the second time  
+	        begin = System.nanoTime();  
+	        try {  
+	        	list  = articleService.getArticleList(article, pageable);  
+	        } catch (Exception e) {  
+	            e.printStackTrace();  
+	        }  
+	        end = System.nanoTime() - begin;  
+	        System.out.println("count :" + end);  
+	        // the second time  
+	        begin = System.nanoTime();  
+	        list  = articleService.getArticleList(article, pageable);  
+	        end = System.nanoTime() - begin;  
+	        System.out.println("count :" + end);  
+	        // the third time  
+	        begin = System.nanoTime();  
+	        list  = articleService.getArticleList(article, pageable);  
+	        end = System.nanoTime() - begin;  
+	        System.out.println("count :" + end); 
+	        
+	        articleService.getlist();
+	        System.out.println("==========================="+cacheManager.getCache("userCache").get("cts1"));
+	        System.out.println("==========================="+cacheManager.getCache("userCache").get("cts"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
